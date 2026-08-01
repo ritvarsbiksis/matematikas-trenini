@@ -1,0 +1,134 @@
+.main {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-4);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* Matches Button's `secondary` variant, but stays a real link. */
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: border-color 120ms ease;
+}
+
+.backLink:hover {
+  border-color: var(--color-text-muted);
+}
+
+.card {
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.cardTitle {
+  margin: 0 0 var(--space-3);
+  font-size: 1rem;
+}
+
+.list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: var(--space-3);
+  font-size: 0.9375rem;
+}
+
+.term {
+  color: var(--color-text-muted);
+}
+
+.value {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.form {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.input {
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+
+.hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.form .buttons {
+  margin-top: 0;
+}
+
+.error,
+.message {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+}
+
+.error {
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger);
+}
+
+.message {
+  margin-top: var(--space-4);
+  color: var(--color-success);
+  border: 1px solid var(--color-success);
+}
