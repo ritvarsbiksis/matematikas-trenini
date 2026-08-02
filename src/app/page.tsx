@@ -2,22 +2,35 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import styles from './page.module.css'
 
-const FEATURES = [
+/** Training worlds. Only multiplication is built so far; the rest are placeholders. */
+const WORLDS = [
   {
-    title: 'Next.js 16 App Router',
-    body: 'Server Components by default, Server Actions for mutations, and proxy.ts for session refresh.',
+    title: 'Reizināšana',
+    subtitle: '1 × 1 līdz 10 × 10',
+    emoji: '✖️',
+    href: '/reizinasana',
+    tone: styles.tonePink,
   },
   {
-    title: 'Supabase auth + Postgres',
-    body: 'Cookie-based SSR auth via @supabase/ssr, with row level security on every table.',
+    title: 'Saskaitīšana',
+    subtitle: 'Drīzumā',
+    emoji: '➕',
+    href: null,
+    tone: styles.toneBlue,
   },
   {
-    title: 'CSS Modules',
-    body: 'Every component owns a component-name.module.css file. No global class name collisions.',
+    title: 'Atņemšana',
+    subtitle: 'Drīzumā',
+    emoji: '➖',
+    href: null,
+    tone: styles.toneGreen,
   },
   {
-    title: 'Vitest + Testing Library',
-    body: 'Component unit tests co-located next to the components they cover.',
+    title: 'Dalīšana',
+    subtitle: 'Drīzumā',
+    emoji: '➗',
+    href: null,
+    tone: styles.toneYellow,
   },
 ]
 
@@ -29,23 +42,40 @@ export default async function HomePage() {
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.title}>Full Stack Starter</h1>
-      <p className={styles.subtitle}>
-        {user ? `Signed in as ${user.email}.` : 'A template repo for Next.js + Supabase projects.'}
-      </p>
+      <header className={styles.header}>
+        <p className={styles.greeting}>Sveiks!</p>
+        <h1 className={styles.title}>Matemātikas treniņi 🚀</h1>
+        <p className={styles.subtitle}>
+          {user ? 'Gatavs šodienas treniņam?' : 'Pieslēdzies, lai sāktu trenēties.'}
+        </p>
+      </header>
 
-      <div className={styles.stack}>
-        {FEATURES.map(feature => (
-          <section key={feature.title} className={styles.card}>
-            <h2 className={styles.cardTitle}>{feature.title}</h2>
-            <p className={styles.cardBody}>{feature.body}</p>
-          </section>
-        ))}
+      <h2 className={styles.sectionTitle}>Izvēlies pasauli</h2>
+
+      <div className={styles.grid}>
+        {WORLDS.map(world =>
+          world.href ? (
+            <Link key={world.title} href={world.href} className={`${styles.tile} ${world.tone}`}>
+              <span className={styles.tileEmoji}>{world.emoji}</span>
+              <span className={styles.tileTitle}>{world.title}</span>
+              <span className={styles.tileSubtitle}>{world.subtitle}</span>
+            </Link>
+          ) : (
+            <div
+              key={world.title}
+              className={`${styles.tile} ${world.tone} ${styles.tileDisabled}`}
+              aria-disabled="true"
+            >
+              <span className={styles.tileEmoji}>{world.emoji}</span>
+              <span className={styles.tileTitle}>{world.title}</span>
+              <span className={styles.tileSubtitle}>{world.subtitle}</span>
+            </div>
+          ),
+        )}
       </div>
 
       <div className={styles.actions}>
-        <Link href="/protected">Go to the protected page</Link>
-        {!user && <Link href="/login">Sign in</Link>}
+        {user ? <Link href="/profile">Mans profils</Link> : <Link href="/login">Pieslēgties</Link>}
       </div>
     </main>
   )

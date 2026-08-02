@@ -1,0 +1,214 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: calc(var(--space-4) + env(safe-area-inset-top)) var(--space-4)
+    calc(var(--space-4) + env(safe-area-inset-bottom));
+}
+
+/* One screenful, laid out top (header) → middle (question) → bottom (answers). */
+.screen {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.progress {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  box-shadow: var(--shadow-card);
+  font: inherit;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Idle screen: everything sits in the middle, within thumb reach. */
+.centered {
+  justify-content: center;
+}
+
+.intro {
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-size: clamp(2rem, 10vw, 2.75rem);
+  line-height: 1.1;
+}
+
+.lead {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-muted);
+}
+
+/* The equation block takes the free space between header and answers. */
+.question {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 6rem;
+}
+
+.equation {
+  font-size: clamp(3rem, 18vw, 5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.equals {
+  font-size: clamp(1.5rem, 8vw, 2.25rem);
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+/* Fixed height so the answer tiles do not jump when the feedback appears. */
+.feedback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+}
+
+.feedback p {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.correctText {
+  color: var(--color-success);
+}
+
+.wrongText {
+  color: var(--color-danger);
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+@media (max-width: 22rem) {
+  .options {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  margin-top: var(--space-4);
+}
+
+.hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.error,
+.warning {
+  margin: 0 0 var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  font-size: 0.9375rem;
+  text-align: center;
+}
+
+.error {
+  color: var(--color-danger);
+}
+
+.warning {
+  color: var(--color-text-muted);
+}
+
+/* Statistics ---------------------------------------------------------------- */
+
+.stats {
+  flex: 1;
+  text-align: center;
+}
+
+.score {
+  margin: 0 0 var(--space-2);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-accent);
+}
+
+.statsList {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  font-size: 1.0625rem;
+}
+
+.statsEquation {
+  font-weight: 700;
+}
+
+.statsOk {
+  color: var(--color-success);
+  font-weight: 800;
+}
+
+.statsBad {
+  color: var(--color-danger);
+  font-weight: 800;
+}
+
+.statsTime {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}

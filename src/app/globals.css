@@ -1,17 +1,29 @@
 :root {
-  --color-bg: #ffffff;
-  --color-surface: #f7f7f8;
-  --color-border: #e4e4e7;
-  --color-text: #18181b;
-  --color-text-muted: #71717a;
-  --color-accent: #4f46e5;
-  --color-accent-hover: #4338ca;
+  --color-bg: #fdf4ff;
+  --color-bg-tint: #e0f2fe;
+  --color-surface: #ffffff;
+  --color-border: #ead9f7;
+  --color-text: #2c1a4b;
+  --color-text-muted: #7c6a97;
+  --color-accent: #f4467e;
+  --color-accent-hover: #d92e66;
   --color-accent-contrast: #ffffff;
   --color-danger: #dc2626;
-  --color-success: #15803d;
+  --color-success: #16a34a;
+
+  /* Playful accents for tiles and answer cards. */
+  --color-fun-blue: #3b82f6;
+  --color-fun-purple: #8b5cf6;
+  --color-fun-green: #22c55e;
+  --color-fun-yellow: #fbbf24;
+
+  --shadow-card: 0 8px 20px rgb(76 29 149 / 0.12);
+  --shadow-pressed: 0 2px 6px rgb(76 29 149 / 0.16);
 
   --radius-sm: 4px;
   --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 28px;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -19,23 +31,35 @@
   --space-4: 1rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
 
   --font-sans:
-    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    ui-rounded, 'SF Pro Rounded', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #0b0b0f;
-    --color-surface: #16161c;
-    --color-border: #2a2a33;
-    --color-text: #f4f4f5;
-    --color-text-muted: #a1a1aa;
-    --color-accent: #818cf8;
-    --color-accent-hover: #a5b4fc;
-    --color-accent-contrast: #0b0b0f;
+    --color-bg: #17102b;
+    --color-bg-tint: #0f172a;
+    --color-surface: #241a3f;
+    --color-border: #3a2c5c;
+    --color-text: #f6f1ff;
+    --color-text-muted: #b3a5cf;
+    --color-accent: #ff6fa3;
+    --color-accent-hover: #ff89b5;
+    --color-accent-contrast: #2c1a4b;
     --color-danger: #f87171;
     --color-success: #4ade80;
+
+    --color-fun-blue: #60a5fa;
+    --color-fun-purple: #a78bfa;
+    --color-fun-green: #4ade80;
+    --color-fun-yellow: #fcd34d;
+
+    --shadow-card: 0 8px 20px rgb(0 0 0 / 0.35);
+    --shadow-pressed: 0 2px 6px rgb(0 0 0 / 0.4);
   }
 }
 
@@ -52,11 +76,17 @@ body {
 }
 
 body {
+  min-height: 100dvh;
   background: var(--color-bg);
+  background-image: linear-gradient(160deg, var(--color-bg) 0%, var(--color-bg-tint) 100%);
+  background-attachment: fixed;
   color: var(--color-text);
   font-family: var(--font-sans);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  /* Mobile first: no blue tap flash, no double-tap zoom delay on buttons. */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 a {
@@ -64,6 +94,6 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 3px solid var(--color-accent);
   outline-offset: 2px;
 }

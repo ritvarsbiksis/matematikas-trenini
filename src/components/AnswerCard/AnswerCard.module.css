@@ -1,0 +1,57 @@
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 5rem;
+  padding: var(--space-3);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 3px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  font: inherit;
+  font-size: clamp(2rem, 9vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform 120ms ease,
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.card:active:not(:disabled) {
+  transform: scale(0.96);
+  box-shadow: var(--shadow-pressed);
+}
+
+/* Kept fully legible when disabled: after an answer the tiles stay on screen as the
+   feedback, so fading them out would hide the result. */
+.card:disabled {
+  cursor: default;
+}
+
+.neutral:disabled {
+  opacity: 0.5;
+}
+
+.correct {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: #ffffff;
+}
+
+.wrong {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+  color: #ffffff;
+}
+
+/* The right answer, highlighted after a miss. */
+.revealed {
+  background: var(--color-surface);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}

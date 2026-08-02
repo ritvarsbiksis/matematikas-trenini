@@ -1,4 +1,4 @@
-# Full Stack Starter
+# Math training App
 
 Template repo for full-stack React projects: **Next.js 16** (App Router, SSR), **Supabase**
 (Postgres + auth), **CSS Modules**, and **Vitest + Testing Library** for component unit tests.
@@ -61,13 +61,16 @@ src/
     login/                  Login page, client form, auth Server Actions
     auth/callback/route.ts  PKCE code exchange
     protected/              Auth-gated page reading the profiles table
+    reizinasana/            Multiplication drill: page, Server Actions, client state machine
   components/
+    AnswerCard/             Big tappable answer tile used by the drill
     Button/                 Button.tsx + Button.module.css + Button.test.tsx
     OAuthButtons/           Google / GitHub / Facebook sign-in
     SignOutButton/
   lib/
     env.ts                  Validated Supabase env vars
     auth/                   Provider list, redirect guard, Server Action state
+    training/               Question generation, shared session types, clock
     supabase/               Browser / server / proxy clients + generated types
   test/utils.tsx            renderWithProviders helper
 supabase/
@@ -75,6 +78,30 @@ supabase/
   seed.sql                  Local dev data
 configs/                    Reference copies of the house ESLint/TS/Prettier style
 ```
+
+## Reizināšana (multiplication drill)
+
+`/reizinasana` is the first training mode. It is auth-gated (`PROTECTED_PREFIXES` in
+`src/proxy.ts`), and one session is 10 random questions with factors 1–10, three answer
+options each. Feedback ("Pareizi!" / "Nav pareizi!") shows for
+`FEEDBACK_COOLDOWN_MS` (1.5s) and "Tālāk" skips the wait; "×" ends the session early.
+Both endings land on the statistics screen.
+
+Everything is persisted for future statistics, in two tables added by
+`supabase/migrations/0004_training_sessions.sql`:
+
+- `training_sessions` — one row per run: `started_at`, `ended_at`, `total_questions`, and
+  `status` (`in_progress` → `completed` / `aborted`).
+- `training_answers` — one row per answered question: the operands, the given answer,
+  `is_correct`, and `duration_ms` measured from the moment the question appeared.
+
+The answer rows are written as the drill runs, without awaiting them, so a slow network
+never stalls a question. A failed write shows a note on the statistics screen rather than
+interrupting the session.
+
+Tuning knobs (`QUESTIONS_PER_SESSION`, `FEEDBACK_COOLDOWN_MS`) live in
+`src/lib/training/sessionState.ts`; question and distractor generation lives in
+`src/lib/training/multiplication.ts`.
 
 ### Adding a component
 

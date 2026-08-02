@@ -3,16 +3,24 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
+  /* 48px minimum so it stays a comfortable tap target on a phone. */
+  min-height: 48px;
+  padding: var(--space-3) var(--space-6);
   border: 1px solid transparent;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xl);
   font: inherit;
-  font-weight: 500;
+  font-size: 1.0625rem;
+  font-weight: 700;
   line-height: 1.2;
   cursor: pointer;
   transition:
     background-color 120ms ease,
-    border-color 120ms ease;
+    border-color 120ms ease,
+    transform 120ms ease;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .button:disabled {
@@ -23,6 +31,7 @@
 .primary {
   background: var(--color-accent);
   color: var(--color-accent-contrast);
+  box-shadow: var(--shadow-card);
 }
 
 .primary:hover:not(:disabled) {
