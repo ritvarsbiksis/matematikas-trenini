@@ -1,0 +1,37 @@
+<!-- Open Graph / Twitter card source, 1200x630. Colours mirror globals.css. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fdf4ff"></stop>
+      <stop offset="1" stop-color="#e0f2fe"></stop>
+    </linearGradient>
+    <linearGradient id="tile" x1="0" y1="0" x2="0.18" y2="1">
+      <stop offset="0" stop-color="#2438EA"></stop>
+      <stop offset="1" stop-color="#3B0D8F"></stop>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"></rect>
+
+  <!-- Icon tile: the 512-unit artwork scaled to 240px and placed at (96, 195). -->
+  <g transform="translate(96 195) scale(0.46875)">
+    <rect width="512" height="512" rx="116" fill="url(#tile)"></rect>
+    <g fill="none" stroke="#fff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M57 188V94a36 36 0 0 1 36-36h94"></path>
+      <path d="M325 58h94a36 36 0 0 1 36 36v94"></path>
+      <path d="M455 324v94a36 36 0 0 1-36 36h-94"></path>
+      <path d="M187 454H93a36 36 0 0 1-36-36v-94"></path>
+    </g>
+    <g fill="none" stroke="#fff" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M114 279l122 85 -19-202 155-28"></path>
+      <path d="M295 233l72 76"></path>
+      <path d="M297 309l68-76"></path>
+    </g>
+  </g>
+
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+    <text x="396" y="300" font-size="72" font-weight="700" fill="#2c1a4b">Matemātikas treniņi</text>
+    <text x="396" y="368" font-size="36" font-weight="400" fill="#7c6a97">Reizināšana no 1 līdz 10</text>
+  </g>
+  <rect x="396" y="410" width="112" height="10" rx="5" fill="#f4467e"></rect>
+</svg>

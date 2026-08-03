@@ -1,0 +1,22 @@
+<!-- Full-bleed variant (no rounded corners) for platforms that apply their own
+     mask, e.g. the iOS home-screen icon. Derived from math-icon.svg. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0.18" y2="1">
+      <stop offset="0" stop-color="#2438EA"></stop>
+      <stop offset="1" stop-color="#3B0D8F"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#g)"></rect>
+  <g fill="none" stroke="#fff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M57 188V94a36 36 0 0 1 36-36h94"></path>
+    <path d="M325 58h94a36 36 0 0 1 36 36v94"></path>
+    <path d="M455 324v94a36 36 0 0 1-36 36h-94"></path>
+    <path d="M187 454H93a36 36 0 0 1-36-36v-94"></path>
+  </g>
+  <g fill="none" stroke="#fff" stroke-width="27" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M114 279l122 85 -19-202 155-28"></path>
+    <path d="M295 233l72 76"></path>
+    <path d="M297 309l68-76"></path>
+  </g>
+</svg>
