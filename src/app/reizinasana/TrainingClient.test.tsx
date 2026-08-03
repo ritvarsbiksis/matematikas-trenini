@@ -92,6 +92,18 @@ describe('TrainingClient', () => {
     expect(answerButtons()).toHaveLength(3)
   })
 
+  it('offers the home and statistics links under Sākt, and hides them mid-drill', async () => {
+    setup()
+
+    expect(screen.getByRole('link', { name: 'Uz Sākumu' })).toHaveAttribute('href', '/')
+    expect(screen.getByRole('link', { name: 'Statistika' })).toHaveAttribute('href', '/statistika')
+
+    await startTraining()
+
+    expect(screen.queryByRole('link', { name: 'Uz Sākumu' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: 'Statistika' })).not.toBeInTheDocument()
+  })
+
   it('does not start when the session cannot be opened', async () => {
     renderWithProviders(
       <TrainingClient

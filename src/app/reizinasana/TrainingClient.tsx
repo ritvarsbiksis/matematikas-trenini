@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { AnswerCard } from '@/components/AnswerCard/AnswerCard'
 import { Button } from '@/components/Button/Button'
@@ -186,6 +187,15 @@ export function TrainingClient({
         <Button fullWidth onClick={() => void handleStart()} disabled={starting}>
           {starting ? 'Sākam…' : 'Sākt'}
         </Button>
+
+        <nav className={styles.navActions}>
+          <Link className={styles.navLink} href="/">
+            Uz Sākumu
+          </Link>
+          <Link className={styles.navLink} href="/statistika">
+            Statistika
+          </Link>
+        </nav>
       </div>
     )
   }

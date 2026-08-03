@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/proxy'
 
 /** Route prefixes that require an authenticated user. */
-const PROTECTED_PREFIXES = ['/protected', '/profile', '/reizinasana']
+const PROTECTED_PREFIXES = ['/protected', '/profile', '/reizinasana', '/statistika']
 
 /**
  * Next.js 16 renamed the `middleware.ts` convention to `proxy.ts`, and the exported

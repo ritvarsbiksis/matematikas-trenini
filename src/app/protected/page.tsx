@@ -29,6 +29,9 @@ export default async function ProtectedPage() {
       <header className={styles.header}>
         <h1 className={styles.title}>Protected</h1>
         <div className={styles.actions}>
+          <Link className={styles.profileLink} href="/">
+            Home
+          </Link>
           <Link className={styles.profileLink} href="/profile">
             Profile
           </Link>

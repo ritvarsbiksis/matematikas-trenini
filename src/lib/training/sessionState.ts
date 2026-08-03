@@ -21,7 +21,8 @@ export type SessionStatus = 'in_progress' | 'completed' | 'aborted'
 export type AnswerRecord = {
   questionIndex: number
   question: Question
-  givenAnswer: number
+  /** `null` only for stored rows that predate the answer being recorded. */
+  givenAnswer: number | null
   isCorrect: boolean
   durationMs: number
 }
