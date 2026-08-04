@@ -42,6 +42,8 @@ export const config = {
      * - favicon.ico
      * - image files
      */
-    String.raw`/((?!_next/static|_next/image|favicon.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)`,
+    // Must stay a plain string literal — Next statically analyses `config` and
+    // silently drops matchers it cannot evaluate (template literals included).
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
