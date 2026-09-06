@@ -21,18 +21,20 @@ function setup() {
   const startSession = vi
     .fn<TrainingActions['startSession']>()
     .mockResolvedValue({ sessionId: 'session-1', error: null })
+  const loadPairStats = vi.fn<TrainingActions['loadPairStats']>().mockResolvedValue([])
   const recordAnswer = vi.fn<TrainingActions['recordAnswer']>().mockResolvedValue({ error: null })
   const finishSession = vi.fn<TrainingActions['finishSession']>().mockResolvedValue({ error: null })
 
   renderWithProviders(
     <TrainingClient
       startSession={startSession}
+      loadPairStats={loadPairStats}
       recordAnswer={recordAnswer}
       finishSession={finishSession}
     />,
   )
 
-  return { startSession, recordAnswer, finishSession }
+  return { startSession, loadPairStats, recordAnswer, finishSession }
 }
 
 async function startTraining() {
@@ -108,6 +110,7 @@ describe('TrainingClient', () => {
     renderWithProviders(
       <TrainingClient
         startSession={vi.fn().mockResolvedValue({ sessionId: null, error: 'Nav pieslēguma.' })}
+        loadPairStats={vi.fn().mockResolvedValue([])}
         recordAnswer={vi.fn()}
         finishSession={vi.fn()}
       />,

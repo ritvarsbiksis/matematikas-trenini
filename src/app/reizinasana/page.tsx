@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { TrainingClient } from './TrainingClient'
-import { finishSession, recordAnswer, startSession } from './actions'
+import { finishSession, loadPairStats, recordAnswer, startSession } from './actions'
 import styles from './page.module.css'
 
 export const metadata = {
@@ -25,6 +25,7 @@ export default async function ReizinasanaPage() {
       {/* Server Actions are passed as props, so jsdom tests can inject stubs. */}
       <TrainingClient
         startSession={startSession}
+        loadPairStats={loadPairStats}
         recordAnswer={recordAnswer}
         finishSession={finishSession}
       />

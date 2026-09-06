@@ -19,10 +19,48 @@ export type Question = {
 /** Returns a float in `[0, 1)`, like `Math.random`. */
 export type Rng = () => number
 
+/** How often a pair was asked in the recent history, and how often it was got wrong. */
+export type PairStat = {
+  asked: number
+  wrong: number
+}
+
+/** Recent history keyed by `pairKey`. A pair missing from the map counts as unseen. */
+export type PairStats = ReadonlyMap<string, PairStat>
+
+/**
+ * Key for one ordered pair. `3 × 4` and `4 × 3` are kept apart on purpose: they are shown
+ * as different questions, and a child who knows one does not necessarily know the other.
+ */
+export function pairKey(left: number, right: number): string {
+  return `${left}x${right}`
+}
+
+/**
+ * Weight of a pair when a drill is put together. The three terms, in the order they
+ * matter: every pair stays in the rotation, a pair the history has barely seen is
+ * favoured, and a pair that was answered wrong is favoured most.
+ */
+export const BASE_WEIGHT = 1
+/** Full bonus for a pair never asked, halved after one ask, thirded after two, and so on. */
+export const UNSEEN_WEIGHT = 4
+/** Added per wrong answer in the history window. */
+export const MISTAKE_WEIGHT = 3
+
+export function pairWeight(stat: PairStat | undefined): number {
+  const { asked, wrong } = stat ?? { asked: 0, wrong: 0 }
+
+  return BASE_WEIGHT + UNSEEN_WEIGHT / (1 + asked) + MISTAKE_WEIGHT * wrong
+}
+
 function randomInt(min: number, max: number, rng: Rng): number {
   return min + Math.floor(rng() * (max - min + 1))
 }
 
+/**
+ * A single uniformly drawn question. The drill itself uses `generateQuestions`, which
+ * weights the draw by history; this is the plain version behind it.
+ */
 export function generateQuestion(rng: Rng = Math.random): Question {
   const left = randomInt(MIN_FACTOR, MAX_FACTOR, rng)
   const right = randomInt(MIN_FACTOR, MAX_FACTOR, rng)
@@ -30,22 +68,103 @@ export function generateQuestion(rng: Rng = Math.random): Question {
   return { left, right, answer: left * right }
 }
 
+type PoolEntry = {
+  question: Question
+  weight: number
+}
+
+/** Every pair in the trainable range, each with the weight its history earns it. */
+function weightedPool(history: PairStats | undefined): PoolEntry[] {
+  const pool: PoolEntry[] = []
+
+  for (let left = MIN_FACTOR; left <= MAX_FACTOR; left++) {
+    for (let right = MIN_FACTOR; right <= MAX_FACTOR; right++) {
+      pool.push({
+        question: { left, right, answer: left * right },
+        weight: pairWeight(history?.get(pairKey(left, right))),
+      })
+    }
+  }
+
+  return pool
+}
+
+function isSamePair(a: Question, b: Question): boolean {
+  return a.left === b.left && a.right === b.right
+}
+
 /**
- * A run of questions. Consecutive repeats are avoided so the same pair never appears
- * twice in a row; with only 100 pairs available, repeats across a longer run are fine.
+ * Index of one entry, drawn with probability proportional to its weight. `exclude` is
+ * skipped unless it is the only thing left, which keeps the same pair off two questions
+ * in a row.
  */
-export function generateQuestions(count: number, rng: Rng = Math.random): Question[] {
-  const questions: Question[] = []
+function pickIndex(pool: PoolEntry[], exclude: Question | undefined, rng: Rng): number {
+  const eligible = (entry: PoolEntry) => !exclude || !isSamePair(entry.question, exclude)
 
-  while (questions.length < count) {
-    const question = generateQuestion(rng)
-    const previous = questions.at(-1)
+  let total = 0
 
-    if (previous && previous.left === question.left && previous.right === question.right) {
+  for (const entry of pool) {
+    if (eligible(entry)) {
+      total += entry.weight
+    }
+  }
+
+  // Only when the pool holds nothing but the excluded pair; then it has to be reused.
+  if (total <= 0) {
+    return pool.length - 1
+  }
+
+  let ticket = rng() * total
+  let last = 0
+
+  for (let i = 0; i < pool.length; i++) {
+    if (!eligible(pool[i])) {
       continue
     }
 
-    questions.push(question)
+    ticket -= pool[i].weight
+    last = i
+
+    if (ticket < 0) {
+      return i
+    }
+  }
+
+  // Floating point can leave a sliver of the ticket unspent; the last eligible entry owns it.
+  return last
+}
+
+export type GenerateOptions = {
+  /**
+   * Recent per-pair history. Pairs that were answered wrong, and pairs that have come up
+   * least often, are drawn more frequently. Omitted, every pair is equally likely.
+   */
+  history?: PairStats
+  rng?: Rng
+}
+
+/**
+ * A run of questions, drawn without replacement so a session of ten asks ten different
+ * pairs — weighted, but never the same weak pair over and over. A run longer than the
+ * 100 available pairs starts the pool over, and the same pair still never appears twice
+ * in a row.
+ */
+export function generateQuestions(
+  count: number,
+  { history, rng = Math.random }: GenerateOptions = {},
+): Question[] {
+  const questions: Question[] = []
+  let pool = weightedPool(history)
+
+  while (questions.length < count) {
+    if (pool.length === 0) {
+      pool = weightedPool(history)
+    }
+
+    const index = pickIndex(pool, questions.at(-1), rng)
+    const [entry] = pool.splice(index, 1)
+
+    questions.push(entry.question)
   }
 
   return questions

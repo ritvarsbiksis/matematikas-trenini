@@ -1,3 +1,4 @@
+import type { PairStatRow } from './history'
 import type { Question } from './multiplication'
 
 /**
@@ -46,6 +47,8 @@ export type ActionResult = { error: string | null }
 /** Server Actions the training client needs, passed in as props so tests can stub them. */
 export type TrainingActions = {
   startSession: () => Promise<StartSessionResult>
+  /** Recent per-pair history, so the next drill leans on the weak and the rarely asked. */
+  loadPairStats: () => Promise<PairStatRow[]>
   recordAnswer: (input: RecordAnswerInput) => Promise<ActionResult>
   finishSession: (
     sessionId: string,

@@ -5,10 +5,12 @@ import { useEffect, useRef, useState } from 'react'
 import { AnswerCard } from '@/components/AnswerCard/AnswerCard'
 import { Button } from '@/components/Button/Button'
 import { now } from '@/lib/training/clock'
+import { toPairStats } from '@/lib/training/history'
 import { buildOptions, generateQuestions } from '@/lib/training/multiplication'
 import { FEEDBACK_COOLDOWN_MS, QUESTIONS_PER_SESSION } from '@/lib/training/sessionState'
 import type { AnswerCardState } from '@/components/AnswerCard/AnswerCard'
-import type { Question } from '@/lib/training/multiplication'
+import type { PairStatRow } from '@/lib/training/history'
+import type { PairStats, Question } from '@/lib/training/multiplication'
 import type { AnswerRecord, SessionStatus, TrainingActions } from '@/lib/training/sessionState'
 import { Statistics } from './Statistics'
 import styles from './page.module.css'
@@ -22,8 +24,8 @@ type Round = {
 
 const SAVE_ERROR = 'Rezultāts netika saglabāts.'
 
-function buildRounds(): Round[] {
-  return generateQuestions(QUESTIONS_PER_SESSION).map(question => ({
+function buildRounds(history: PairStats): Round[] {
+  return generateQuestions(QUESTIONS_PER_SESSION, { history }).map(question => ({
     question,
     options: buildOptions(question),
   }))
@@ -31,6 +33,7 @@ function buildRounds(): Round[] {
 
 export function TrainingClient({
   startSession,
+  loadPairStats,
   recordAnswer,
   finishSession,
 }: Readonly<TrainingActions>) {
@@ -101,7 +104,12 @@ export function TrainingClient({
     setStartError(null)
     setSaveError(null)
 
-    const result = await startSession()
+    // Fetched alongside the session so the weighting costs no extra wait, and re-fetched
+    // on every start so a second run in a row already reflects the first one's mistakes.
+    const [result, stats] = await Promise.all([
+      startSession(),
+      loadPairStats().catch((): PairStatRow[] => []),
+    ])
 
     setStarting(false)
 
@@ -111,7 +119,7 @@ export function TrainingClient({
     }
 
     sessionIdRef.current = result.sessionId
-    setRounds(buildRounds())
+    setRounds(buildRounds(toPairStats(stats)))
     setAnswers([])
     showQuestion(0)
   }

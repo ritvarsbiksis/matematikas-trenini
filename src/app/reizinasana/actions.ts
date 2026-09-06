@@ -1,7 +1,9 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { HISTORY_LIMIT, summarisePairs } from '@/lib/training/history'
 import { QUESTIONS_PER_SESSION } from '@/lib/training/sessionState'
+import type { PairStatRow } from '@/lib/training/history'
 import type {
   ActionResult,
   RecordAnswerInput,
@@ -38,6 +40,30 @@ export async function startSession(): Promise<StartSessionResult> {
   }
 
   return { sessionId: data.id, error: null }
+}
+
+/**
+ * The signed-in user's recent answers, tallied per pair. Failures return an empty
+ * history on purpose: a drill with evenly weighted questions is better than no drill.
+ */
+export async function loadPairStats(): Promise<PairStatRow[]> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) {
+    return []
+  }
+
+  // RLS restricts this to the caller's own answers — no `.eq()` filter needed.
+  const { data } = await supabase
+    .from('training_answers')
+    .select('left_operand, right_operand, is_correct')
+    .order('answered_at', { ascending: false })
+    .limit(HISTORY_LIMIT)
+
+  return summarisePairs(data ?? [])
 }
 
 export async function recordAnswer(input: RecordAnswerInput): Promise<ActionResult> {
